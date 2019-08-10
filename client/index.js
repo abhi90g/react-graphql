@@ -13,6 +13,7 @@ import SongDetail from './components/SongDetail'
 const client = new ApolloClient({
   dataIdFromObject: o => o.id    // o denotes object
                                  // use the id of record to update and rerender
+                                 //also this does not make additional query
 })
 
 const Root = () => {

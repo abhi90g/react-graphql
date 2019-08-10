@@ -3,9 +3,17 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 
 class LyricList extends Component {
-    onLike(id) {
+    onLike(id, likes) {
         this.props.mutate({
-            variables: { id }
+            variables: { id },
+            optimisticResponse: { //this is exactly what is recieved in response when like is clicked
+                __typename: 'Mutation',  // but here we want to show increment instantly and 
+                likeLyric: {             //not wait for request response
+                    id: id,
+                    __typename: 'LyricType',
+                    likes: likes + 1
+                }
+            }
         })
     }
 
@@ -14,12 +22,15 @@ class LyricList extends Component {
             return (
                 <li key={id} className='collection-item'>
                     {content}
-                    <i 
-                        className='material-icons right'
-                        onClick={() => this.onLike(id)}>
-                        thumb_up
-                    </i>
-                    {likes}
+                    <div className='vote-box'>
+                        <i 
+                            className='material-icons right'
+                            onClick={() => this.onLike(id, likes)}>
+                            thumb_up
+                        </i>
+                    {likes}  
+                    </div>
+                    
                 </li>
             )
         })
