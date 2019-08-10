@@ -7,8 +7,16 @@ const schema = require('./schema/schema');
 
 const app = express();
 
+let MONGO_URI = ''
+if (process.env.NODE_ENV === 'production') {
+  console.log('prod mongo: ', process.env.NODE_ENV)
+  MONGO_URI = process.env.MONGO_URI
+} else {
+  console.log('dev mongo instance: ', process.env.NODE_ENV)
+  MONGO_URI = 'mongodb+srv://lyricaldb1:Odvlef5U5CedU2Nv@cluster0-epg5l.mongodb.net/test?retryWrites=true&w=majority';
+}
 // mongoLab URI
-const MONGO_URI = 'mongodb+srv://lyricaldb1:Odvlef5U5CedU2Nv@cluster0-epg5l.mongodb.net/test?retryWrites=true&w=majority';
+// const MONGO_URI = 'mongodb+srv://lyricaldb1:Odvlef5U5CedU2Nv@cluster0-epg5l.mongodb.net/test?retryWrites=true&w=majority';
 if (!MONGO_URI) {
   throw new Error('You must provide a MongoLab URI');
 }
