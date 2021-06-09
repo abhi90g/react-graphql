@@ -1,6 +1,6 @@
 const express = require('express');
 const models = require('./models');
-const expressGraphQL = require('express-graphql');
+const expressGraphQL = require('express-graphql').graphqlHTTP;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const schema = require('./schema/schema');
@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
   MONGO_URI = process.env.MONGO_URI
 } else {
   console.log('dev mongo instance: ', process.env.NODE_ENV)
-  MONGO_URI = 'mongodb+srv://lyricaldb1:Odvlef5U5CedU2Nv@cluster0-epg5l.mongodb.net/test?retryWrites=true&w=majority';
+  MONGO_URI = '';
 }
 // mongoLab URI
 // const MONGO_URI = 'mongodb+srv://lyricaldb1:Odvlef5U5CedU2Nv@cluster0-epg5l.mongodb.net/test?retryWrites=true&w=majority';
@@ -22,12 +22,12 @@ if (!MONGO_URI) {
 }
 
 mongoose.Promise = global.Promise;
-mongoose.connect(MONGO_URI);
+mongoose.connect(MONGO_URI, { useNewUrlParser: true });
 mongoose.connection
     .once('open', () => console.log('Connected to MongoLab instance.'))
     .on('error', error => console.log('Error connecting to MongoLab:', error));
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use('/graphql', expressGraphQL({
   schema,
   graphiql: true
